@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>HTML Form Examples</title>
+    <link rel="icon" type="image/x-icon" href="data:" />
+    <style>
+        body {
+            font-family: Tahoma;
+        }
+
+        summary {
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>HTML Form Examples</h1>
+
+    <!-- Example 1 - Submitting a Form using GET and POST methods (Echo Controller) -->
+    <details>
+        <summary>Example 1 - Submitting a Form using GET and POST methods (Echo Controller)</summary>
+
+        <form action="http://sandboxserver-001-site1.atempurl.com/Echo" method="GET">
+            <h3>Submitting a form using GET method</h3>
+            <input type="text" name="studentId" placeholder="Student Id" />
+            <input type="text" name="studentName" placeholder="Student Name" />
+            <input type="hidden" name="myHiddenData" value="Some hidden data" />
+            <input type="submit" value="Send" />
+            <input type="reset" value="Reset" />
+        </form>
+        <br />
+        <hr />
+        <form action="http://sandboxserver-001-site1.atempurl.com/Echo" method="POST">
+            <h3>Submitting a form using POST method</h3>
+            <input type="text" name="studentId" placeholder="Student Id" />
+            <input type="text" name="studentName" placeholder="Student Name" />
+            <input type="hidden" name="myHiddenData" value="Some hidden data" />
+            <input type="submit" value="Send" />
+            <input type="reset" value="Reset" />
+        </form>
+
+
+    </details>
+
+    <!-- Example 2 - Listing Tasks (SimpleTask Controller) -->
+    <details>
+        <summary>
+            Example 2 - Listing Tasks (SimpleTask Controller)
+        </summary>
+
+        <form action="http://sandboxserver-001-site1.atempurl.com/SimpleTask/GetList?studentNumber=2332294" method="POST">
+            <input type="submit" value="Get List" />
+        </form>
+
+
+    </details>
+
+    <!-- Example 3 - Adding / Updating a Task (SimpleTask Controller) -->
+    <details>
+        <summary>
+            Example 3 - Adding / Updating a Task (SimpleTask Controller)
+        </summary>
+
+        <form action="http://sandboxserver-001-site1.atempurl.com/SimpleTask/Save?studentNumber=2332294" method="POST">
+            <input type="number" name="taskNumber" placeholder="Task Number" />
+            <input type="text" name="taskName" placeholder="Task Name" />
+            <select name="taskStatus">
+                <option value="0">Pending</option>
+                <option value="1">In Progress</option>
+                <option value="2">Done</option>
+            </select>
+            <input type="submit" value="Send" />
+            <input type="reset" value="Reset" />
+        </form>
+
+    </details>
+
+
+    <!-- Example 4 - Deleting a Task (SimpleTask Controller) -->
+    <details>
+        <summary>
+            Example 4 - Deleting a Task (SimpleTask Controller)
+        </summary>
+
+        <form action="http://sandboxserver-001-site1.atempurl.com/SimpleTask/Delete?studentNumber=2332294" method="POST">
+            <input type="number" name="taskNumber" placeholder="Task Number" />
+            <input type="submit" value="Send" />
+            <input type="reset" value="Reset" />
+        </form>
+
+
+    </details>
+</body>
+</html>

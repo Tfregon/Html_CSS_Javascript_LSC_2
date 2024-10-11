@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Ajax Examples</title>
+    <link rel="icon" type="image/x-icon" href="data:" />
+    <style>
+        body {
+            font-family: Tahoma;
+        }
+
+        summary {
+            margin: 10px;
+        }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+    <h1>Ajax Examples</h1>
+    <h2>Use the Developer Console to see the output messages.</h2>
+
+    <!-- Example 1 - Submitting data using Ajax Form Serialization (Echo Controller) -->
+    <details>
+        <summary>Example 1 - Submitting data using Ajax Form Serialization (Echo Controller)</summary>
+
+        <form id="echoForm" action="http://sandboxserver-001-site1.atempurl.com/Echo" method="POST">
+            <!-- You may also try "GET", but keep in mind that "POST" is better. -->
+            <input type="text" name="studentId" placeholder="Student Id" />
+            <input type="text" name="studentName" placeholder="Student Name" />
+            <input type="hidden" name="myHiddenData" value="Some hidden data" />
+            <input type="button" id="btnEx1Send" value="Send" />
+            <input type="reset" value="Reset" />
+        </form>
+        <script>
+            $(document).ready(function () {
+                $("#btnEx1Send").on("click", btnEx1Send_onclick);
+            });
+
+            function btnEx1Send_onclick() {
+                let formData = $("#echoForm").serialize(); // Serialize the form data
+                let actionUrl = $("#echoForm").attr("action");
+                let methodType = $("#echoForm").attr("method");
+                $.ajax({
+                    url: actionUrl,
+                    type: methodType,
+                    data: formData,
+                    success: function (response) { // Handle the successful response
+                        console.log(response);
+                    },
+                    error: function (error) { // Handle errors
+                        console.error("Error:", error);
+                    }
+                });
+            }
+        </script>
+
+    </details>
+
+    <!-- Example 2 - Listing Tasks (SimpleTask Controller) -->
+    <details>
+        <summary>Example 2 - Listing Tasks (SimpleTask Controller)</summary>
+
+        <input type="button" id="btnEx2GetList" value="Get List" />
+        <script>
+            $(document).ready(function () {
+                $("#btnEx2GetList").on("click", btnEx2GetList_onclick);
+            });
+            function btnEx2GetList_onclick() {
+                $.ajax({
+                    url: "http://sandboxserver-001-site1.atempurl.com/SimpleTask/GetList?studentNumber=2332294
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function (listOfTasks) {
+                        console.log(listOfTasks);
+                    },
+                    error: function (error) {
+                        console.log("Error: " + JSON.stringify(error));
+                    }
+                });
+            }
+        </script>
+
+
+    </details>
+
+    <!-- Example 3 - Adding / Updating a Task (SimpleTask Controller) -->
+    <details>
+        <summary>Example 3 - Adding / Updating a Task (SimpleTask Controller)</summary>
+
+        <input type="number" id="txtEx3TaskNumber" placeholder="Task Number" />
+        <input type="text" id="txtEx3TaskName" placeholder="Task Name" />
+        <select id="selEx3Status">
+            <option value="0">Pending</option>
+            <option value="1">In Progress</option>
+            <option value="2">Done</option>
+        </select>
+        <input type="button" id="btnEx3Save" value="Save" />
+        <script>
+            $(document).ready(function () {
+                $("#btnEx3Save").on("click", btnEx3Save_onclick);
+            });
+            function btnEx3Save_onclick() {
+                let task = new Object();
+                task.taskNumber = $("#txtEx3TaskNumber").val();
+                task.taskName = $("#txtEx3TaskName").val();
+                task.taskStatus = $("#selEx3Status").val();
+                $.ajax({
+                    url: "http://sandboxserver-001-site1.atempurl.com/SimpleTask/Save?studentNumber=2332294",
+                    type: "POST",
+                    data: task, // Send the data object
+                    success: function (response) {
+                        console.log(response.message);
+                    },
+                    error: function (error) {
+                        console.log("Error: " + JSON.stringify(error));
+                    }
+                });
+            }
+        </script>
+
+
+    </details>
+
+    <!-- Example 4 - Deleting a Task (SimpleTask Controller)-->
+    <details>
+        <summary>Example 4 - Deleting a Task (SimpleTask Controller)</summary>
+
+        <input type="number" id="txtEx4TaskNumber" placeholder="Task Number" />
+        <input type="button" id="btnEx4Delete" value="Delete" />
+        <script>
+            $(document).ready(function () {
+                $("#btnEx4Delete").on("click", btnEx4Delete_onclick);
+            });
+            function btnEx4Delete_onclick() {
+                let task = new Object();
+                task.taskNumber = $("#txtEx4TaskNumber").val();
+                $.ajax({
+                    url: "http://sandboxserver-001-site1.atempurl.com/SimpleTask/Delete?studentNumber=2332294",
+                    type: "POST",
+                    data: task, // Send the data object
+                    success: function (response) {
+                        if (response.success)
+                            console.log(response.message);
+                        else
+                            console.log("Errors: " + response.errors.join(", "));
+                    },
+                    error: function (error) {
+                        console.log("Error: " + JSON.stringify(error));
+                    }
+                });
+            }
+        </script>
+
+
+    </details>
+</body>
+</html>
