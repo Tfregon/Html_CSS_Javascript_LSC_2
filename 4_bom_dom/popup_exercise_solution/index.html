@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="data:" />
+    <title>Pop-up Exercise</title>
+    <style>
+        .right {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pop-up Exercise</h1>
+
+    <input type="button" value="Receive task data from pop-up" onclick="openTaskPopup()" />
+    <table>
+        <tr>
+            <td class="right">
+                Task Number:
+            </td>
+            <td>
+                <input type="text" id="txtTaskNumber" />
+            </td>
+        </tr>
+        <tr>
+            <td class="right">
+                Task Name:
+            </td>
+            <td>
+                <input type="text" id="txtTaskName" />
+            </td>
+        </tr>
+        <tr>
+            <td class="right">
+                Task Status:
+            </td>
+            <td>
+                <select id="selTaskStatus">
+                    <option value="0">Pending</option>
+                    <option value="1">In Progress</option>
+                    <option value="2">Done</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+
+    <br />
+
+    <input type="button" value="Receive employee data from pop-up" onclick="openEmployeePopup()" />
+    <table>
+        <tr>
+            <td class="right">
+                Employee Number:
+            </td>
+            <td>
+                <input type="text" id="txtEmployeeNumber" />
+            </td>
+        </tr>
+        <tr>
+            <td class="right">
+                Employee Name:
+            </td>
+            <td>
+                <input type="text" id="txtEmployeeName" />
+            </td>
+        </tr>
+        <tr>
+            <td class="right">
+                Employee Position:
+            </td>
+            <td>
+                <input type="text" id="txtEmployeePosition" />
+            </td>
+        </tr>
+    </table>
+
+    <script>
+        function openTaskPopup() {
+            window.open("task_popup.html", "", "width=600,height=400");
+        }
+
+        function receiveTaskData(task) {
+            document.getElementById("txtTaskNumber").value = task.taskNumber;
+            document.getElementById("txtTaskName").value = task.taskName;
+            document.getElementById("selTaskStatus").value = task.taskStatus;
+            //or:
+            //document.getElementById("selTaskStatus").selectedIndex = parseInt(task.taskStatus);
+        }
+
+        function openEmployeePopup() {
+            window.open("employee_popup.html", "", "width=600,height=400");
+        }
+
+        function receiveEmployeeData(employee) {
+            document.getElementById("txtEmployeeNumber").value = employee.employeeNumber;
+            document.getElementById("txtEmployeeName").value = employee.employeeName;
+            document.getElementById("txtEmployeePosition").value = employee.employeePosition;
+        }
+    </script>
+</body>
+</html>

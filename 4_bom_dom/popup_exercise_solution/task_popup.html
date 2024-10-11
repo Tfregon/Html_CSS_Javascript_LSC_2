@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="data:" />
+    <title>New Task</title>
+    <style>
+        .right {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>New Task</h1>
+
+    <table>
+        <tr>
+            <td class="right">
+                Task Number:
+            </td>
+            <td>
+                <input type="text" id="txtTaskNumber" />
+            </td>
+        </tr>
+        <tr>
+            <td class="right">
+                Task Name:
+            </td>
+            <td>
+                <input type="text" id="txtTaskName" />
+            </td>
+        </tr>
+        <tr>
+            <td class="right">
+                Task Status:
+            </td>
+            <td>
+                <select id="selTaskStatus">
+                    <option value="0">Pending</option>
+                    <option value="1">In Progress</option>
+                    <option value="2">Done</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+
+    <input type="button" value="Create new Task" onclick="returnTaskObject()" />
+
+    <script>
+        function returnTaskObject() {
+            let task = new Object();
+            task.taskNumber = document.getElementById("txtTaskNumber").value;
+            task.taskName = document.getElementById("txtTaskName").value;
+            task.taskStatus = document.getElementById("selTaskStatus").value;
+            window.opener.receiveTaskData(task);
+            window.close();
+        }
+    </script>
+</body>
+</html>

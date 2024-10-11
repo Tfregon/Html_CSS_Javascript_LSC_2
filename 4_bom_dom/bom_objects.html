@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="data:" />
+    <title>BOM Objects (location, navigator, screen, history, window, and timers)</title>
+    <style>
+        input {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>BOM Objects (location, navigator, screen, history, window, and timers)</h1>
+    <h2>Use the Developer Console to see the output messages.</h2>
+
+    <!-- location object -->
+    <details>
+        <summary>
+            location object
+        </summary>
+
+        <input type="button" value="Inspect location on console" onclick="console.log(location)" />
+
+        <br />
+
+        <input type="text" id="txtUrl" placeholder="http:// or https://" />
+        <input type="button" value="Go to URL address" onclick="goToUrl()" />
+
+        <br />
+
+        <input type="button" value="Reload the page" onclick="location.reload()" />
+
+        <script>
+            function goToUrl() {
+                location.href = document.getElementById("txtUrl").value;
+            }
+        </script>
+    </details>
+
+    <!-- navigator object -->
+    <details>
+        <summary>
+            navigator object
+        </summary>
+
+        <input type="button" value="Inspect navigator on console" onclick="console.log(navigator)" />
+
+        <br />
+
+        <input type="text" id="txtSample" placeholder="Type something to copy" />
+        <input type="button" value="Copy" onclick="copySample()" />
+
+        <br />
+
+        <input type="button" value="Get device's battery info" onclick="getBatteryInfo()" />
+
+        <script>
+            function copySample() {
+                let textToCopy = document.getElementById("txtSample").value;
+                navigator.clipboard.writeText(textToCopy);
+                console.log(textToCopy + " has been copied to your clipboard");
+            }
+
+            function getBatteryInfo() {
+
+                //navigator.getBattery will return a promisse
+                //To learn more about promisses, check: https://www.w3schools.com/js/js_promise.asp
+
+                navigator.getBattery()
+                    .then(function (battery) {
+                        console.log(battery);
+                    })
+                    .catch(function (error) {
+                        // Handle any errors that may occur while getting battery information
+                        console.error('Error getting battery information:', error);
+                    });
+            }
+        </script>
+    </details>
+
+    <!-- screen object -->
+    <details>
+        <summary>
+            screen object
+        </summary>
+
+        <input type="button" value="Inspect screen on console" onclick="console.log(screen)" />
+    </details>
+
+    <!-- history object -->
+    <details>
+        <summary>
+            history object
+        </summary>
+
+        <a href="history_pages/page_a.html">Open history example</a>
+    </details>
+
+    <!-- window object -->
+    <details>
+        <summary>
+            window object
+        </summary>
+
+        <input type="button" value="Inspect window on console" onclick="console.log(window)" />
+
+        <br />
+
+        <input type="button" value="Window.open example 1" onclick="windowOpenExample1()" />
+        <input type="button" value="Window.open example 2" onclick="windowOpenExample2()" />
+        <input type="button" value="Window.open example 3" onclick="windowOpenExample3()" />
+
+        <hr />
+
+        <input type="button" value="Receive student data from pop-up" onclick="openStudentPopup()" />
+        <input type="button" value="Receive message data from pop-up" onclick="openMessagePopup()" />
+
+        <script>
+            function windowOpenExample1() {
+                //Open the page in a new tab:
+                window.open("popup_pages/hello_popup.html");
+            }
+
+            function windowOpenExample2() {
+                //Open the page in a pop-up window:
+                window.open("popup_pages/hello_popup.html", "OptionalWindowName", "width=600,height=400");
+            }
+
+            function windowOpenExample3() {
+                //Open the page in a pop-up window in the middle of the screen:
+                let width = 600;
+                let height = 400;
+                let left = (window.innerWidth - width) / 2;
+                let top = (window.innerHeight - height) / 2;
+                //or:
+                //let left = (screen.width - width) / 2;
+                //let top = (screen.height - height) / 2;
+                let windowFeatures = "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top;
+                window.open("popup_pages/hello_popup.html", "OptionalWindowName", windowFeatures);
+            }
+
+            function openStudentPopup() {
+                window.open("popup_pages/student_popup.html", "", "width=600,height=400");
+            }
+
+            function openMessagePopup() {
+                window.open("popup_pages/message_popup.html", "", "width=600,height=400");
+            }
+
+            function receiveStudentData(student) {
+                console.log(student);
+            }
+
+            function receiveMessageData(message) {
+                console.log(message);
+            }
+        </script>
+    </details>
+
+    <!-- timers -->
+    <details>
+        <summary>
+            timers
+        </summary>
+
+
+        <input type="button" value="Test setInterval (Timer 1)" onclick="testTimer1()" />
+        <input type="text" id="txtTimer" readonly="readonly" />
+        <input type="button" value="Abort setInterval (Timer 1)" onclick="abortTimer1()" />
+
+        <br />
+
+        <input type="button" value="Test setTimeout (Timer 2)" onclick="testTimer2()" />
+        <input type="button" value="Abort setTimeout (Timer 2)" onclick="abortTimer2()" />
+
+        <script>
+
+            let timer1;
+            let counter = 0;
+            function testTimer1() {
+                timer1 = setInterval(function () {
+                    counter++;
+                    document.getElementById("txtTimer").value = counter;
+                }, 1000); //1000 milliseconds = 1 second
+            }
+
+            function abortTimer1() {
+                clearInterval(timer1);
+            }
+
+            let timer2;
+            function testTimer2() {
+                timer2 = setTimeout(function () {
+                    alert("HELLO TIMER 2!");
+                }, 2000); //2 seconds
+            }
+
+            function abortTimer2() {
+                clearTimeout(timer2);
+            }
+        </script>
+    </details>
+</body>
+</html>
