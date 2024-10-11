@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="data:">
+    <title>Calculator 2</title>
+</head>
+<body>
+    <h1>Calculator 2</h1>
+    <h2>Use the Developer Console to see the output messages.</h2>
+
+    <script>
+
+        var repeat;
+
+        do {
+            var option = presentOptions();
+            if (option == "5")
+                repeat = "n";
+            else {
+                executeCalculation(option);
+                repeat = prompt("Would you like to do another calculation? (y/n):");
+            }
+        }
+        while (repeat == "y" || repeat == "Y")
+
+        function presentOptions() {
+            var option;
+            var validOption;
+            do {
+                console.log("CALCULATOR 2");
+                console.log("------------");
+                console.log("1 - Addition");
+                console.log("2 - Subtraction");
+                console.log("3 - Multiplication");
+                console.log("4 - Division");
+                console.log("5 - Exit");
+
+                option = prompt("Please, select an option between 1 and 5: ");
+                option = option == null ? "5" : option;
+                validOption = option == "1" || option == "2" || option == "3" || option == "4" || option == "5";
+                if (!validOption)
+                    console.log("Invalid option!");
+            }
+            while (!validOption);
+            return option;
+        }
+
+        function executeCalculation(option) {
+            var number1 = parseFloat(prompt("Enter the first number:"));
+            var number2 = parseFloat(prompt("Enter the second number:"));
+            var result;
+            var operation;
+            switch (option) {
+                case "1":
+                    result = number1 + number2;
+                    operation = "+";
+                    break;
+                case "2":
+                    result = number1 - number2;
+                    operation = "-";
+                    break;
+                case "3":
+                    result = number1 * number2;
+                    operation = "*";
+                    break;
+                case "4":
+                    result = number1 / number2;
+                    operation = "/";
+                    break;
+            }
+            console.log(number1 + operation + number2 + "=" + result);
+        }
+
+    </script>
+</body>
+</html>

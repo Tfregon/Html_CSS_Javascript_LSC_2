@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="data:">
+    <title>Calculator 1</title>
+</head>
+<body>
+    <h1>Calculator 1</h1>
+    <h2>Use the Developer Console to see the output messages.</h2>
+
+    <script>
+        console.log("CALCULATOR 1");
+        console.log("------------");
+        console.log("1 - Addition");
+        console.log("2 - Subtraction");
+        console.log("3 - Multiplication");
+        console.log("4 - Division");
+
+        var option = prompt("Please, select an option between 1 and 4: ");
+
+        if (option == "1" || option == "2" || option == "3" || option == "4") {
+            var number1 = parseFloat(prompt("Enter the first number:"));
+            var number2 = parseFloat(prompt("Enter the second number:"));
+            var result;
+            var operation;
+            switch (option) {
+                case "1":
+                    result = number1 + number2;
+                    operation = "+";
+                    break;
+                case "2":
+                    result = number1 - number2;
+                    operation = "-";
+                    break;
+                case "3":
+                    result = number1 * number2;
+                    operation = "*";
+                    break;
+                case "4":
+                    result = number1 / number2;
+                    operation = "/";
+                    break;
+            }
+            console.log(number1 + operation + number2 + "=" + result);
+        }
+    </script>
+</body>
+</html>
