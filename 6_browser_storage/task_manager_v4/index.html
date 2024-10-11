@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Task Manager Version 4</title>
+    <link rel="icon" type="image/x-icon" href="data:" />
+    <link rel="stylesheet" href="/shared_assets/css/task_manager.css" />
+</head>
+
+<body>
+    <h1>Task Manager Version 4</h1>
+
+    <p>
+        Create, update, and delete tasks using jQuery. This version can save tasks using IndexeDB, Cookies, or Local Storage.
+    </p>
+
+    <p>
+        <a href="/index.html">Home</a>
+    </p>
+
+    <input id="btnAdd" type="button" value="Add Task" />
+
+    <table id="tblMyTable" style="margin-top:20px; display:none;">
+        <thead>
+            <tr>
+                <th>Task Number</th>
+                <th>Task Name</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="tblMyTableBody">
+        </tbody>
+    </table>
+
+    <p id="pPending" class="attention"></p>
+    <p id="pInProgress"></p>
+    <p id="pDone" class="success"></p>
+
+    <!-- Including jQuery (check https://releases.jquery.com/ to get the latest version) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+        //*** SUPPORT FUNCTIONS
+
+        function displayLoadedTasks(listOfTasks) {
+            for (let i = 0; i < listOfTasks.length; i++) {
+                let task = listOfTasks[i];
+                receiveTaskData(task, false);
+            }
+            displayTotalTasks();
+        }
+
+        function receiveTaskData(task, save) {
+
+            let tblMyTableBody = $("#tblMyTableBody");
+
+            if (task.taskNumber == undefined) {
+                if (tblMyTableBody.children().length == 0)
+                    task.taskNumber = 1;
+                else
+                    task.taskNumber = parseInt(tblMyTableBody.find("tr").last().find("td").first().text()) + 1;
+            }
+
+            let row = $("<tr>");
+
+            let colTaskNumber = $("<td>").text(task.taskNumber);
+
+            let colTaskName = $("<td>");
+            let txtTaskName = $("<input>").attr("type", "text").addClass("txtTaskName").val(task.taskName).prop("disabled", true);
+            colTaskName.append(txtTaskName);
+
+            let colStatus = $("<td>");
+            let selStatus = $("<select>")
+            selStatus.append(createSelectOption("Pending", 0)); // Pending = 0
+            selStatus.append(createSelectOption("In Progress", 1)); // In Progress = 1
+            selStatus.append(createSelectOption("Done", 2)); // Done = 2
+            selStatus.val(task.taskStatus).addClass("selStatus").prop("disabled", true);
+            colStatus.append(selStatus);
+
+            let colActions = $("<td>");
+
+            let btnEdit = $("<img>").attr("src", "/shared_assets/images/edit.png").attr("title", "Edit").addClass("btnEdit").on("click", btnEdit_onclick);
+            let btnRemove = $("<img>").attr("src", "/shared_assets/images/remove.png").attr("title", "Remove").addClass("btnRemove").on("click", btnRemove_onclick);
+            let btnSave = $("<img>").attr("src", "/shared_assets/images/save.png").attr("title", "Save").addClass("btnSave").css("display", "none").on("click", btnSave_onclick);
+            let btnCancel = $("<img>").attr("src", "/shared_assets/images/cancel.png").attr("title", "Cancel").addClass("btnCancel").css("display", "none").on("click", btnCancel_onclick);
+
+            colActions.append(btnEdit, btnRemove, btnSave, btnCancel);
+
+            row.append(colTaskNumber, colTaskName, colStatus, colActions);
+
+            tblMyTableBody.append(row);
+
+            $("#tblMyTable").show();
+
+            if (save) {
+                saveToStorage(task, function () {
+                    displayTotalTasks();
+                });
+            }
+        }
+
+        function createSelectOption(text, value) {
+            return $("<option>").text(text).val(value);
+        }
+
+        function displayTotalTasks() {
+            let totalPending = 0;
+            let totalInProgress = 0;
+            let totalDone = 0;
+
+            $(".selStatus").each(function () {
+                let statusValue = $(this).val();
+                if (statusValue == 0)
+                    totalPending++;
+                else if (statusValue == 1)
+                    totalInProgress++;
+                else
+                    totalDone++;
+            });
+
+            $("#pPending").text("Pending: " + totalPending);
+            $("#pInProgress").text("In Progress: " + totalInProgress);
+            $("#pDone").text("Done: " + totalDone);
+
+            if (totalPending == 0 && totalInProgress == 0 && totalDone == 0)
+                $("#tblMyTable").hide();
+
+            else
+                $("#tblMyTable").show();
+        }
+
+        function closeEditRow(row, restoreOriginalValues) {
+            let txtTaskName = row.find(".txtTaskName");
+            let selStatus = row.find(".selStatus");
+
+            txtTaskName.prop("disabled", true);
+            selStatus.prop("disabled", true);
+
+            if (restoreOriginalValues) {
+                txtTaskName.val(txtTaskName.data("originalValue"));
+                selStatus.val(selStatus.data("originalValue"));
+            }
+
+            row.find(".btnEdit, .btnRemove").show();
+            row.find(".btnSave, .btnCancel").hide();
+        }
+
+        function getTaskFromRow(row) {
+            var task = new Object();
+            task.taskNumber = parseInt($(row).find("td").first().text());
+            task.taskName = $(row).find(".txtTaskName").first().val();
+            task.taskStatus = $(row).find(".selStatus").first().val();
+            return task;
+        }
+    </script>
+
+    <script>
+        //*** EVENT HANDLERS
+
+        $(document).ready(function () {
+            $("#btnAdd").on("click", btnAdd_onclick);
+        });
+
+        function btnAdd_onclick() {
+            window.open("task_popup.html", "", "width=600,height=250,left=400,top=200");
+        }
+
+        function btnEdit_onclick() {
+            let row = $(this).closest("tr"); // find closest ancestor
+
+            let txtTaskName = row.find(".txtTaskName");
+            txtTaskName.data("originalValue", txtTaskName.val()).prop("disabled", false);
+
+            let selStatus = row.find(".selStatus");
+            selStatus.data("originalValue", selStatus.val()).prop("disabled", false);
+
+            row.find(".btnEdit, .btnRemove").hide();
+            row.find(".btnSave, .btnCancel").show();
+        }
+
+        function btnCancel_onclick() {
+            let row = $(this).closest("tr");
+            closeEditRow(row, true);
+        }
+
+        function btnRemove_onclick() {
+            if (!confirm("Do you really want to remove?"))
+                return;
+
+            let row = $(this).closest("tr");
+            let task = getTaskFromRow(row);
+
+            deleteFromStorage(task, function () {
+                row.remove();
+                displayTotalTasks();
+            });
+        }
+
+        function btnSave_onclick() {
+            let row = $(this).closest("tr");
+
+            let task = getTaskFromRow(row);
+            if (task.taskName == "") {
+                alert("Please, inform the task name");
+                return;
+            }
+
+            saveToStorage(task, function () {
+                closeEditRow(row, false);
+                displayTotalTasks();
+            });
+        }
+    </script>
+
+    <!-- <script src="js/indexedDBManager.js"></script> -->
+    <!--<script src="js/cookieManager.js"></script> -->
+    <script src="js/localStorageManager.js"></script>
+
+</body>
+</html>

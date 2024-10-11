@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="data:" />
+    <title>Cookie Example</title>
+    <style>
+        body {
+            font-family: Tahoma;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cookie Example</h1>
+    <h2>Use the Developer Console to see the output messages.</h2>
+
+    <button id="btnAdd">Add</button>
+    <button id="btnList">List</button>
+    <button id="btnUpdate">Update</button>
+    <button id="btnDelete">Delete</button>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+ //*** SUPPORT FUNCTIONS
+
+        $(document).ready(function () {
+            $("#btnAdd").on("click", btnAdd_onclick);
+            $("#btnList").on("click", btnList_onclick);
+            $("#btnUpdate").on("click", btnUpdate_onclick);
+            $("#btnDelete").on("click", btnDelete_onclick);
+        });
+
+        function findPresenceById(id) {
+            return document.cookie.startsWith("student" + id + "=") ||
+                   document.cookie.indexOf("; student" + id + "=") > 0;
+        }
+
+
+        function saveToStorage(student, expirationDays) {
+            let cookieValue = JSON.stringify(student);
+            let cookieValueEncode = encodeURIComponent(cookieValue);
+            let expirationDate = new Date();
+            expirationDate.setDate(expirationDate.getDate() + expirationDays);
+            let expirationDateUTC = expirationDate.toUTCString();
+            let cookieName = "student" + student.id;
+            let cookieString = cookieName + "=" + cookieValueEncode + "; expires=" + expirationDateUTC;
+            document.cookie = cookieString;
+        }
+    </script>
+
+    <script>
+ //*** EVENT HANDLERS
+
+        function btnAdd_onclick() {
+            let student = new Object();
+            student.id = prompt("Enter the Student Id");
+            if (student.id == null) return;
+
+            student.name = prompt("Enter the Student Name");
+            if (student.name == null) return;
+
+            student.email = prompt("Enter the Student Email");
+            if (student.email == null) return;
+
+            saveToStorage(student, 7);
+            console.log("Student added successfully");
+        }
+
+        function btnList_onclick() {
+            let listOfStudents = new Array();
+            let cookies = document.cookie.split("; ");
+            if (cookies.length === 0 || cookies[0] === "")
+                return listOfStudents;
+            for (let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i];
+                let [cookieName, cookieValue] = cookie.split("=");
+                if (cookieName.startsWith("student")) {
+                    let cookieValueDecode = decodeURIComponent(cookieValue);
+                    let student = JSON.parse(cookieValueDecode);
+                    listOfStudents.push(student);
+                }
+            }
+            console.log("All Students:", listOfStudents);
+
+        }
+
+        function btnUpdate_onclick() {
+            let student = new Object();
+            student.id = prompt("Enter the Student Id");
+            if (student.id == null) return;
+            if (!findPresenceById(student.id)) {
+                console.log("Student not found");
+                return;
+            }
+
+            student.name = prompt("Enter the Student Name");
+            if (student.name == null) return;
+
+            student.email = prompt("Enter the Student Email");
+            if (student.email == null) return;
+
+            saveToStorage(student, 7);
+            console.log("Student updated successfully");
+        }
+
+        function btnDelete_onclick() {
+            let student = new Object();
+            student.id = prompt("Enter the Student Id");
+            if (student.id == null) return;
+            if (!findPresenceById(student.id)) {
+                console.log("Student not found");
+                return;
+            }
+            saveToStorage(student, -1); /* setting the expiration to yesterday 
+                                        (today -1) will force the browser to 
+                                        remove the expired cookie */
+            console.log("Delete successfully executed");
+
+        }
+    </script>
+</body>
+</html>

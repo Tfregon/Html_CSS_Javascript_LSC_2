@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="data:" />
+    <title>Local Storage Example</title>
+    <style>
+        body {
+            font-family: Tahoma;
+        }
+    </style>
+</head>
+<body>
+    <h1>Local Storage Example</h1>
+    <h2>Use the Developer Console to see the output messages.</h2>
+
+    <button id="btnAdd">Add</button>
+    <button id="btnList">List</button>
+    <button id="btnUpdate">Update</button>
+    <button id="btnDelete">Delete</button>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+ //*** SUPPORT FUNCTIONS
+
+        $(document).ready(function () {
+            $("#btnAdd").on("click", btnAdd_onclick);
+            $("#btnList").on("click", btnList_onclick);
+            $("#btnUpdate").on("click", btnUpdate_onclick);
+            $("#btnDelete").on("click", btnDelete_onclick);
+        });
+
+        function findPresenceById(id) {
+            return localStorage.getItem("student" + id) != null;
+        }
+
+        function saveToStorage(student) {
+            let key = "student" + student.id;
+            let value = JSON.stringify(student);
+            localStorage.setItem(key, value);
+        }
+
+    </script>
+
+    <script>
+ //*** EVENT HANDLERS
+
+        function btnAdd_onclick() {
+            let student = new Object();
+            student.id = prompt("Enter the Student Id");
+            if (student.id == null) return;
+            student.name = prompt("Enter the Student Name");
+            if (student.name == null) return;
+            student.email = prompt("Enter the Student Email");
+            if (student.email == null) return;
+            saveToStorage(student);
+            console.log("Student added successfully");
+        }
+
+        function btnList_onclick() {
+            let listOfStudents = new Array();
+            let allKeys = Object.keys(localStorage);
+            allKeys.sort();
+            for (let i = 0; i < allKeys.length; i++) {
+                let key = allKeys[i];
+                if (key.startsWith("student")) {
+                    let value = localStorage.getItem(key);
+                    let student = JSON.parse(value);
+                    listOfStudents.push(student);
+                }
+            }
+            console.log("All Students:", listOfStudents);
+        }
+
+        function btnUpdate_onclick() {
+            let student = new Object();
+            student.id = prompt("Enter the Student Id");
+            if (student.id == null) return;
+            if (!findPresenceById(student.id)) {
+                console.log("Student not found");
+                return;
+            }
+            student.name = prompt("Enter the Student Name");
+            if (student.name == null) return;
+            student.email = prompt("Enter the Student Email");
+            if (student.email == null) return;
+            saveToStorage(student);
+            console.log("Student updated successfully");
+        }
+
+        function btnDelete_onclick() {
+            let student = new Object();
+            student.id = prompt("Enter the Student Id");
+            if (student.id == null) return;
+            if (!findPresenceById(student.id)) {
+                console.log("Student not found");
+                return;
+            }
+            let key = "student" + student.id;
+            localStorage.removeItem(key);
+            console.log("Delete successfully executed");
+        }
+    </script>
+</body>
+</html>
