@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Login Manager Version 1</title>
+    <link rel="icon" type="image/x-icon" href="data:" />
+    <link rel="stylesheet" href="/evaluations/final_project/css/login_manager.css" />
+</head>
+
+<body>
+    <h1>Login Manager Version 1</h1>
+
+    <p>
+        Create, update, and delete logins using jQuery. This version will save logins using IndexeDB.
+    </p>
+
+
+    <input id="btnAdd" type="button" value="Add Login" />
+
+    <table id="tblMyTable" style="margin-top:20px; display:none;">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Url</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="tblMyTableBody">
+        </tbody>
+    </table>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+        //*** SUPPORT FUNCTIONS
+
+        function displayLoadedLogin(listOfLogin) {
+            for (let i = 0; i < listOfLogin.length; i++) {
+                let login = listOfLogin[i];
+                receiveLoginData(login, false);
+            }
+        }
+
+        function receiveLoginData(login, save) {
+
+            let tblMyTableBody = $("#tblMyTableBody");
+
+            if (login.numberId == undefined) {
+                if (tblMyTableBody.children().length == 0)
+                    login.numberId = 1;
+                else
+                    login.numberId = parseInt(tblMyTableBody.find("tr").last().find("td").first().text()) + 1;
+            }
+
+            let row = $("<tr>");
+
+            let colId = $("<td>").text(login.numberId);
+
+            let colUrl = $("<td>");
+            let txtUrl = $("<input>").addClass("txtUrl").val(login.url).hide();
+            let txtUrlLink = $("<a>").attr("href", login.url).attr("target", "_blank").addClass("txtUrlLink").text(login.url);
+            colUrl.append(txtUrl, txtUrlLink);
+            txtUrl.data("originalValue", login.url);
+
+            let colUsername = $("<td>");
+            let spanUsername = $("<span>").text(login.username).addClass("spanUsername");
+            let txtUsername = $("<input>").attr("type", "text").addClass("txtUsername").val(login.username).hide();
+            colUsername.append(txtUsername,spanUsername);
+            txtUsername.data("originalValue", login.username);
+
+            let colPassword = $("<td>");
+            let txtPassword = $("<input>").attr("type", "password").addClass("txtPassword").val(login.password).attr("placeholder", "Password").hide();
+            
+            let txtRepeatPassword = $("<input>").attr("type", "Password").addClass("txtRepeatPassword").val(login.password).attr("placeholder", "Repeat Password").hide();
+            let spanPassword = $("<span>").text("***").addClass("spanPassword");
+            colPassword.append(txtPassword, $("<br>"), txtRepeatPassword, spanPassword );
+
+            txtPassword.data("originalValue", login.password);
+            txtRepeatPassword.data("originalValue", login.repeatPassword);
+
+            let colActions = $("<td>");
+
+            let btnEdit = $("<img>").attr("src", "/shared_assets/images/edit.png").attr("title", "Edit").addClass("btnEdit").on("click", btnEdit_onclick);
+            let btnPassword = $("<img>").attr("src", "/shared_assets/images/password.png").attr("title", "Password Reset").addClass("btnPassword").on("click", btnPassword_onclick);
+            let btnRemove = $("<img>").attr("src", "/shared_assets/images/remove.png").attr("title", "Remove").addClass("btnRemove").on("click", btnRemove_onclick);
+            let btnSave = $("<img>").attr("src", "/shared_assets/images/save.png").attr("title", "Save").addClass("btnSave").css("display", "none").on("click", btnSave_onclick);
+            let btnCancel = $("<img>").attr("src", "/shared_assets/images/cancel.png").attr("title", "Cancel").addClass("btnCancel").css("display", "none").on("click", btnCancel_onclick);
+
+            colActions.append(btnEdit, btnPassword, btnRemove, btnSave, btnCancel);
+
+            row.append(colId, colUrl, colUsername, colPassword, colActions);
+
+            tblMyTableBody.append(row);
+
+            $("#tblMyTable").show();
+
+            if (save) {
+                saveToStorage(login, function () {
+                });
+            }
+        }
+
+        function closeEditRow(row, restoreOriginalValues) {
+
+            
+            let txtUrl = row.find(".txtUrl");
+            let txtUrlLink = row.find(".txtUrlLink");
+            let txtUsername = row.find(".txtUsername");
+            let txtPassword = row.find(".txtPassword");
+            let txtRepeatPassword = row.find(".txtRepeatPassword");
+            let spanUsername = row.find(".spanUsername");
+            let spanPassword = row.find(".spanPassword");
+
+            if (restoreOriginalValues) {
+                txtUrl.val(txtUrl.data("originalValue"));
+                txtUrlLink.val(txtUrlLink.data("originalValue"));
+                txtUsername.val(txtUsername.data("originalValue"));
+                txtPassword.val(txtPassword.data("originalValue"));
+                txtRepeatPassword.val(txtRepeatPassword.data("originalValue"));
+                spanUsername.val(txtUsername).show();
+            }
+            else {
+                // o texto do span do username precisa ser txtUsername.val()
+                txtUrlLink.attr("href", txtUrl.val());
+                txtUrlLink.text(txtUrl.val()).show();
+
+                spanUsername.text(txtUsername.val()).show();
+                spanPassword.val("***").show();
+            }
+            txtUrl.hide();
+            txtUrlLink.show();
+            txtUsername.hide();
+            txtPassword.hide();
+            txtRepeatPassword.hide();
+
+            // Mostrar os spans
+            spanUsername.show();
+            spanPassword.show();
+
+            row.find(".btnEdit, .btnRemove, .btnPassword").show();
+            row.find(".btnSave, .btnCancel").hide();
+        }
+
+        function getLoginFromRow(row) {
+            var login = new Object();
+            login.numberId = parseInt($(row).find("td").first().text());
+            login.url = $(row).find(".txtUrl").first().val();
+            login.username = $(row).find(".txtUsername").first().val();
+            login.password = $(row).find(".txtPassword").first().val();
+            login.repeatPassword = $(row).find(".txtRepeatPassword").first().val();
+            return login;
+        }
+    </script>
+
+    <script>
+        //*** EVENT HANDLERS
+
+        $(document).ready(function () {
+            $("#btnAdd").on("click", btnAdd_onclick);
+        });
+
+        function btnAdd_onclick() {
+            window.open("login_popup.html", "", "width=600,height=250,left=400,top=200");
+        }
+
+        function btnEdit_onclick() {
+            let row = $(this).closest("tr");
+
+            let txtUrl = row.find(".txtUrl");
+            txtUrl.data("originalValue", txtUrl.val()).show();
+            let txtUrlLink = row.find(".txtUrlLink");
+            txtUrlLink.data("originalValue", txtUrlLink.val()).hide();
+
+            let txtUsername = row.find(".txtUsername");
+            txtUsername.data("originalValue", txtUsername.val());
+            txtUsername.show();
+
+            let spanUsername = row.find(".spanUsername");
+            spanUsername.hide();
+
+            row.find(".btnEdit, .btnRemove, .btnPassword").hide();
+            row.find(".btnSave, .btnCancel").show();
+        }
+
+        function btnPassword_onclick() {
+            let row = $(this).closest("tr");
+
+            row.find(".spanPassword").hide();
+
+            let txtPassword = row.find(".txtPassword");
+            txtPassword.data("originalValue", txtPassword.val());
+            txtPassword.val("").show();
+
+            let txtRepeatPassword = row.find(".txtRepeatPassword");
+            txtRepeatPassword.data("originalValue", txtRepeatPassword.val()).show();
+            txtRepeatPassword.val("").show();          
+
+            row.find(".btnEdit, .btnRemove, .btnPassword").hide();
+            row.find(".btnSave, .btnCancel").show();
+        }
+
+        function btnCancel_onclick() {
+            let row = $(this).closest("tr");
+            closeEditRow(row, true);
+        }
+
+        function btnRemove_onclick() {
+            if (!confirm("Do you really want to remove?"))
+                return;
+
+            let row = $(this).closest("tr");
+            let login = getLoginFromRow(row);
+   
+            deleteFromStorage(login, function () {
+                row.remove();
+                if ($("#tblMyTableBody").children().length == 0) {
+                    $("#tblMyTable").css("display", "none");
+                }
+            });
+        }
+
+        function btnSave_onclick() {
+            let row = $(this).closest("tr");
+
+            let login = getLoginFromRow(row);
+            if (login.url == "" || login.username == "" || login.password == "" || login.repeatPassword == "") {
+                alert("Please, complete all informations before proced.");
+                return;
+            }
+            if (login.password !== login.repeatPassword) {
+                alert("Please, the informations must match.");
+                return;
+            }
+
+            saveToStorage(login, function () {
+                closeEditRow(row, false);
+            });
+        }
+
+    </script>
+
+    <script src="indexedDBManager.js"></script>
+
+</body>

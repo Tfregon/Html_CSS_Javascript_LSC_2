@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="data:" />
+    <title>New Login</title>
+    <style>
+        body {
+            font-family: Tahoma;
+        }
+
+        .right {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>New Login</h1>
+
+    <table>
+        <tr>
+            <td class="right">
+                Url:
+            </td>
+            <td>
+                <input type="url" id="txtUrl" />
+            </td>
+        </tr>
+        <tr>
+            <td class="right">
+                Username:
+            </td>
+            <td>
+                <input type="text" id="txtUsername" />
+            </td>
+        </tr>
+        <tr>
+            <td class="right">
+                Password:
+            </td>
+            <td>
+                <input type="password" id="txtPassword" />
+            </td>
+        </tr>
+        <tr>
+            <td class="right">
+                Repeat the Password:
+            </td>
+            <td>
+                <input type="password" id="txtRepeatPassword" />
+            </td>
+        </tr>  
+    </table>
+
+    <br />
+
+    <input id="btnCreateLogin" type="button" value="Create new Login" />
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $("#btnCreateLogin").on("click", btnCreateLogin_onclick);
+        });
+
+        function btnCreateLogin_onclick() {
+            let login = new Object();
+            login.url = $("#txtUrl").val();
+            login.username = $("#txtUsername").val();
+            login.password = $("#txtPassword").val();
+            login.repeatPassword = $("#txtRepeatPassword").val();
+
+            if (login.url == "" || login.username == "" || login.password == "" || login.repeatPassword == "" && login.password !== login.repeatPassword) {
+                alert("All fields are required!");
+                return;
+            }
+            if (login.password !== login.repeatPassword) {
+                alert("All fields password must match!");
+                return;
+            }
+
+            window.opener.receiveLoginData(login, true);
+            window.close();
+        }
+    </script>
+</body>
+</html>
