@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="data:" />
+    <title>jQuery Introduction</title>
+    <style>
+        body {
+            font-family: Tahoma;
+        }
+
+        details {
+            margin-bottom: 10px;
+        }
+
+        div {
+            font-weight: bold;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <h1>jQuery Introduction</h1>
+    <h2>Use the Developer Console to see the output messages.</h2>
+    <h2>Use breakpoints in the Developer Console and run each script step by step.</h2>
+
+    <!-- Basic jQuery Syntax -->
+    <details id="details1">
+        <summary>
+            Basic jQuery Syntax
+        </summary>
+
+        <p id="p1">
+            Paragraph A
+        </p>
+
+        <p class="myClass">
+            Paragraph B
+        </p>
+
+        <p class="myClass">
+            Paragraph C
+        </p>
+
+        <p>
+            Paragraph D
+        </p>
+
+        <script>
+            $(document).ready(function () {
+                console.log($("p")); // selects all paragraphs
+                console.log($(".myClass")); // selects elements with the class "myClass"
+                console.log($("#p1")); // selects the element with the ID "myId"
+            });
+        </script>
+    </details>
+
+    <!-- Manipulating Elements -->
+    <details id="details2">
+        <summary>
+            Manipulating Elements
+        </summary>
+
+        <p id="myParagraph1"></p>
+        <p id="myParagraph2"></p>
+        <input type="text" id="myTextbox" />
+        <input id="myButton" type="button" value="Test Button" />
+        <img id="myImage" />
+
+        <script>
+            $(document).ready(function () {
+                $("#myParagraph1").text("New Text"); //also test: $("#myParagraph1").text("New <b>Text</b>");
+                $("#myParagraph2").html("New <b>Text</b>");
+                $("#myTextbox").val("Next Text");
+                $("#myButton").prop("disabled", true);
+                $("#myImage").attr("src", "/shared_assets/images/save.png");
+            });
+        </script>
+    </details>
+
+    <!-- Dynamically Adding Elements -->
+    <details id="details3">
+        <summary>
+            Dynamically Adding Elements
+        </summary>
+
+        <div id="div1" style="background-color:lightgreen; padding:20px; width:250px;">
+            <div id="div2" style="background-color:yellow; padding:20px;">
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                $("#div2").before('<span style="color:black">Before</span>');
+                $("#div2").after('<span style="color:white">After</span>');
+                $("#div2").prepend('<span style="color:green">Prepend</span>');
+                $("#div2").append('<span style="color:blue">Append</span>');
+            });
+        </script>
+    </details>
+
+    <!-- Creating Event Handlers -->
+    <details>
+        <summary>
+            Creating Event Handlers
+        </summary>
+
+        <input type="button" id="btnTest1" value="Hello jQuery" />
+
+        <input type="button" id="btnTest2" value="Hello jQuery" />
+
+        <script>
+            $(document).ready(function () {
+                $("#btnTest1").on("click", function () {
+                    console.log("Hello anonymous function");
+                });
+
+                $("#btnTest2").on("click", btnTest2_onclick);
+            });
+
+            function btnTest2_onclick() {
+                console.log("Hello btnTest2_onclick");
+            }
+        </script>
+    </details>
+</body>
+</html>

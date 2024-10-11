@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="data:" />
+    <title>jQuery Exercise</title>
+    <style>
+        body {
+            font-family: Tahoma;
+        }
+
+        input {
+            margin: 5px;
+        }
+
+        b {
+            color: red;
+        }
+
+        strong {
+            color: green;
+        }
+
+        em {
+            color: blue;
+            font-weight: bold;
+        }
+
+        i {
+            color: purple;
+            font-weight: bold;
+        }
+
+        details {
+            margin-bottom: 10px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <h1>jQuery Exercise</h1>
+    <h2>Use the Developer Console to see the output messages.</h2>
+
+    <!-- Basic jQuery Syntax -->
+    <details>
+        <summary>
+            Basic jQuery Syntax
+        </summary>
+
+        <p id="p1">
+            Paragraph A
+        </p>
+
+        <p class="myClass">
+            Paragraph B
+        </p>
+
+        <p class="myClass">
+            Paragraph C
+        </p>
+
+        <p>
+            Paragraph D
+        </p>
+
+        <input type="button" id="btnAll" value="Select all paragraphs" />
+        <input type="button" id="btnByClass" value="Select paragraphs by class" />
+        <input type="button" id="btnById" value="Select paragraph by id" />
+
+        <script>
+            // Step 1: Wait for the document to be fully loaded
+
+            //      Step 2: Attach a click event handler to the "Select all paragraphs" button
+            //          Step 3: Select all 'p' elements and display them in the console
+
+            //      Step 4: Attach a click event handler to the "Select paragraphs by class" button
+            //          Step 5: Select all elements with the class "myClass" and display them in the console
+
+            //      Step 6: Attach a click event handler to the "Select paragraph by id" button
+            //          Step 7: Select the element with the id "p1" and display it in the console
+
+
+            // Step 1: Wait for the document to be fully loaded
+            $(document).ready(function () {
+                //Step 2: Attach a click event handler to the "Select all paragraphs" button
+                $("#btnAll").on("click", function () {
+                    //Step 3: Select all 'p' elements and display them in the console
+                    console.log($("p"));
+                });
+
+                //Step 4: Attach a click event handler to the "Select paragraphs by class" button
+                $("#btnByClass").on("click", function () {
+                    //Step 5: Select all elements with the class "myClass" and display them in the console
+                    console.log($(".myClass"));
+                });
+
+                //Step 6: Attach a click event handler to the "Select paragraph by id" button
+                $("#btnById").on("click", function() {
+                    //Step 7: Select the element with the id "p1" and display it in the console
+                    console.log($("#p1"));
+                });
+            });
+        </script>
+    </details>
+
+    <!-- Manipulating Elements -->
+    <details>
+        <summary>
+            Manipulating Elements
+        </summary>
+
+
+        <input id="txtTextBox1" type="text" />
+
+        <input type="button" id="btnText" value=".text example" />
+
+        <input type="button" id="btnHtml" value=".html example" />
+
+
+        <h3>****************</h3>
+        <h3 id="myHeading">My Heading</h3>
+        <h3>****************</h3>
+
+        <h4>A</h4>
+        <h4>B</h4>
+        <h4>C</h4>
+
+        <table>
+            <tr>
+                <td class="diagonal">1</td>
+                <td>2</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td class="diagonal">5</td>
+                <td>6</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>8</td>
+                <td class="diagonal">9</td>
+            </tr>
+        </table>
+
+        <script>
+            // Step 1: Wait for the document to be fully loaded
+
+            //      Step 2: Attach a click event handler to the ".text example" button
+            //          Step 2.1: Get the value from the input field with ID "txtTextBox1" and store in a variable called txt1Value
+            //          Step 2.2: Set the text content of the h3 element with ID "myHeading" to txt1Value
+            //          Step 2.3: Set the text content of the h4 element to txt1Value
+            //          Step 2.4: Set the text content of all elements with class "diagonal" to txt1Value
+
+
+            //      Step 3: Attach a click event handler to the ".html example" button
+            //          Step 3.1: Get the value from the input field with ID "txtTextBox1" and store in a variable called txt1Value
+            //          Step 3.2: Set the HTML content of the h3 element with ID "myHeading" to txt1Value
+            //          Step 3.3: Set the HTML content of the h4 element to txt1Value
+            //          Step 3.4: Set the HTML content of all elements with class "diagonal" to txt1Value
+
+
+            // Step 1: Wait for the document to be fully loaded
+            $(document).ready(function () {
+                // Step 2: Attach a click event handler to the ".text example" button
+                $("#btnText").on("click", function () {
+                    //Step 2.1: Get the value from the input field with ID "txtTextBox1" and store in a variable called txt1Value
+                    let txt1Value = $("#txtTextBox1").val();
+
+                    //Step 2.2: Set the text content of the h3 element with ID "myHeading" to txt1Value
+                    $("#myHeading").text(txt1Value);
+
+                    //Step 2.3: Set the text content of the h4 elements to txt1Value
+                    $("h4").text(txt1Value);
+
+                    //Step 2.4: Set the text content of all elements with class "diagonal" to txt1Value
+                    $(".diagonal").text(txt1Value);
+                });
+
+                //Step 3: Attach a click event handler to the ".html example" button
+                $("#btnHtml").on("click", function () {
+                    //Step 3.1: Get the value from the input field with ID "txtTextBox1" and store in a variable called txt1Value
+                    let txt1Value = $("#txtTextBox1").val();
+
+                    //Step 3.2: Set the HTML content of the h3 element with ID "myHeading" to txt1Value
+                    $("#myHeading").html(txt1Value);
+
+                    //Step 3.3: Set the HTML content of the h4 element to txt1Value
+                    $("h4").html(txt1Value);
+
+                    //Step 3.4: Set the HTML content of all elements with class "diagonal" to txt1Value
+                    $(".diagonal").html(txt1Value);
+                });
+            });
+        </script>
+    </details>
+
+    <!-- Dynamically Adding Elements -->
+    <details>
+        <summary>
+            Dynamically Adding Elements
+        </summary>
+
+        <input id="btnBefore" type="button" value="Before example" />
+        <input id="btnPrepend" type="button" value="Prepend example" />
+        <input id="btnAppend" type="button" value="Append example" />
+        <input id="btnAfter" type="button" value="After example" />
+
+        <hr />
+
+        <ol>
+            <li>myList1 - List item A</li>
+            <li>myList1 - List item B</li>
+            <li>myList1 - List item C</li>
+        </ol>
+
+        <script>
+            // Step 1: Wait for the document to be fully loaded
+
+            //      Step 2: Attach a click event handler to the "Before example" button
+            //          Step 2.1: Insert <i>Test text (before)</i> before the <ol> element
+
+            //      Step 3: Attach a click event handler to the "Prepend example" button
+            //          Step 3.1: Prepend <li><strong>Test text (prepend)</strong></li> in the <ol> element
+
+            //      Step 4: Attach a click event handler to the "Append example" button
+            //          Step 4.1: Append <li><b>Test text (append)</b></li> in the <ol> element
+
+            //      Step 5: Attach a click event handler to the "After example" button
+            //          Step 5.1: Insert <em>Test text (after)</em> after the <ol> element
+
+            
+            // Step 1: Wait for the document to be fully loaded
+            $(document).ready(function () {
+                //Step 2: Attach a click event handler to the "Before example" button
+                $("#btnBefore").on("click", function () {
+                    //Step 2.1: Insert <i>Test text (before)</i> before the <ol> element
+                    $("ol").before("<i>Test text (before)</i>");
+                });
+
+                //Step 3: Attach a click event handler to the "Prepend example" button
+                $("#btnPrepend").on("click", function () {
+                    //Step 3.1: Prepend <li><strong>Test text (prepend)</strong></li> in the <ol> element
+                    $("ol").prepend("<li><strong>Test text (prepend)</strong></li>");
+                });
+
+                //Step 4: Attach a click event handler to the "Append example" button
+                $("#btnAppend").on("click", function () {
+                    //Step 4.1: Append <li><b>Test text (append)</b></li> in the <ol> element
+                    $("ol").append("<li><b>Test text (append)</b></li>");
+                });
+
+                //Step 5: Attach a click event handler to the "After example" button
+                $("#btnAfter").on("click", function () {
+                    //Step 5.1: Insert <em>Test text (after)</em> after the <ol> element
+                    $("ol").after("<em>Test text (after)</em>");
+                });
+            });
+        </script>
+    </details>
+</body>
+</html>

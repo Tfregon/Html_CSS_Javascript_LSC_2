@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="data:">
+    <title>New Task</title>
+    <style>
+        body {
+            font-family: Tahoma;
+        }
+
+        .right {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>New Task</h1>
+
+    <table>
+        <tr>
+            <td class="right">
+                Task Name:
+            </td>
+            <td>
+                <input type="text" id="txtTaskName" />
+            </td>
+        </tr>
+        <tr>
+            <td class="right">
+                Task Status:
+            </td>
+            <td>
+                <select id="selTaskStatus">
+                    <option value="0">Pending</option>
+                    <option value="1">In Progress</option>
+                    <option value="2">Done</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+
+    <br />
+
+    <input id="btnCreateTask" type="button" value="Create new Task" />
+
+    <!-- Including jQuery (check https://releases.jquery.com/ to get the latest version) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#btnCreateTask").on("click", btnCreateTask_onclick);
+        });
+
+        function btnCreateTask_onclick() {
+            let task = new Object();
+            //task.taskName = document.getElementById("txtTaskName").value;
+            task.taskName = $("#txtTaskName").val();
+            //task.taskStatus = document.getElementById("selTaskStatus").value;
+            task.taskStatus = $("#selTaskStatus").val();
+
+            if (task.taskName == "") {
+                alert("Please inform the task name");
+                return;
+            }
+
+            window.opener.receiveTaskData(task);
+            window.close();
+        }
+    </script>
+</body>
+</html>
